@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<Product Id="{D2A8F91E-09B8-40F5-B1C7-00FBE2147885}" Name="VibrationVIEW_Gus" Language="1033" Version="1.0.0.0" Manufacturer="Vibration Research Corporation" UpgradeCode="fef9f99e-bf4e-4099-8c68-33fb9f0aeb68">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Description="VibrationVIEW Installer" Comments="VibrationVIEW is a registered trademark of Vibration Research" Manufacturer='Vibration Research Corporation' Platform='x86' />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="VibrationVIEW_Gus" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<!-- lookup vibrationview install folder, most recent version wins -->
+		<Property Id="INSTALLDIR">
+			<RegistrySearch Id="SystemFilePath2014" Type="raw" Root="HKLM" Key="Software\Vibration Research Corporation\2014.0" Name="System File Path" />
+			<RegistrySearch Id="SystemFilePath2015" Type="raw" Root="HKLM" Key="Software\Vibration Research Corporation\2015.0" Name="System File Path" />
+		</Property>
+
+		<!-- Folder Structure -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLDIR" Name="VibrationVIEW_Gus" />
+			</Directory>
+		</Directory>
+
+		<!--initialize WIXUI_INSTALLDIR dialog to allow user to change install folder, and force our license -->
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<UIRef Id="WixUI_InstallDir" />
+		<WixVariable Id="WixUILicenseRtf" Value="GUS_ReadMe.rtf" />
+		<WixVariable Id="WixUIDialogBmp" Value="dlgbmp.bmp" />
+		<WixVariable Id="WixUIBannerBmp" Value="bannrbmp.bmp" />
+	</Fragment>
+
+	<!-- Copy dll to the install folder, write the heat.exe captured registry for the dll -->
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLDIR">
+			<Component Id="VibrationVIEW_GUS">
+				<Class Id="{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}" Context="InprocServer32" Description="VibrationVIEW_GUS.GUS" ThreadingModel="both" ForeignServer="mscoree.dll">
+					<ProgId Id="VibrationVIEW_GUS.GUS" Description="VibrationVIEW_GUS.GUS" />
+				</Class>
+				<File Id="fileTargetDLL" KeyPath="yes" Source="$(var.VibrationVIEW_GUS.TargetPath)" />
+				<File Id="fileReadme" Source="GUS_ReadMe.rtf" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.0.0" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.0.0" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+
+</Wix>
