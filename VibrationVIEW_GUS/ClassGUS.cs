@@ -1,4 +1,14 @@
-﻿using System;
+﻿// VibrationVIEW_GUS
+// GUS interface to VibrationVIEW controller
+// Copyright (C) 2016  Vibration Research Corporation
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//
+// Project Dependencies:
+//   VibrationVIEW (32 bit) - COM only supported (32 bit), COM+ NOT SUPPORTED (64 bit)
+
+
+using System;
 using System.Text;
 using QED.GUS;
 using VibrationVIEWLib;
@@ -104,9 +114,9 @@ namespace VibrationVIEW_GUS
 						// check if the test restarted
 						if (VibrationVIEWControl.Running == FALSE)
 						{
-							return CallReturnFAIL;
 							// this should be caught in VibrationVIEW
 							state = GusStatus.Error;
+							return CallReturnFAIL;
 						}
 						else
 						{
