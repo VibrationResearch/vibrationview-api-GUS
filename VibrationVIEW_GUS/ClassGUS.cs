@@ -86,17 +86,35 @@ namespace VibrationVIEW_GUS
 			/// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
 			public string GUS_CloseTest()
 			{
-				UpdateRunningState();
-				if ((_State == GusStatus.Ready) || (_State == GusStatus.Finished))
+			// defined in VibrationVIEW Resource.h file
+			const int ID_TEST_CLOSE = 33050;
+			UpdateRunningState();
+			if ((_State == GusStatus.Ready) || (_State == GusStatus.Finished) || (_State == GusStatus.Error))
+			{
+				if(_VibrationVIEWTestName != "")
 				{
-					// we don't explicitly unload tests.
-					_VibrationVIEWTestName = "";
-					_State = GusStatus.DeviceOpen;
-					return GusConstants.CallReturnSuccess;
+					try
+					{
+						// switch to the selected test
+						_VibrationVIEWControl.OpenTest(_VibrationVIEWTestName);
+						// and close the test
+						_VibrationVIEWControl.MenuCommand(ID_TEST_CLOSE);
+					}
+					catch (Exception)
+					{
+						return CallReturnFAIL;
+					}
 				}
-				// invalid state
-				return CallReturnFAIL;
+
+				_VibrationVIEWControl.set_TestType(vvTestType.VV_TEST_SYSCHECK);
+				_VibrationVIEWTestName = "";
+				_State = GusStatus.DeviceOpen;
+
+				return GusConstants.CallReturnSuccess;
 			}
+			// invalid state
+			return CallReturnFAIL;
+		}
 
 			/// <summary>
 			/// The equipment goes in RUN mode again. The running test is continued.
