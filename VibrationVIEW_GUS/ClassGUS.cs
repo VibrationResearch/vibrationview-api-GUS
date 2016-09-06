@@ -123,15 +123,23 @@ namespace VibrationVIEW_GUS
 			/// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
 			public string GUS_ContinueTest()
 			{
+				UpdateRunningState();
 				if (_State == GusStatus.Pause)
 				{
 					try
 					{
-						// we should be able to resume the test
+					// we should be able to resume the test
+					if(_VibrationVIEWControl.Running == FALSE)
+					{
 						_VibrationVIEWControl.ResumeTest();
+					} else
+					{
+						const int ID_TEST_ADVANCETONEXTLEVEL = 32896;
+						_VibrationVIEWControl.MenuCommand(ID_TEST_ADVANCETONEXTLEVEL);
+					}
 
-						// check if the test restarted
-						if (_VibrationVIEWControl.Running == FALSE)
+					// check if the test restarted
+					if (_VibrationVIEWControl.Running == FALSE)
 						{
 							// this should be caught in VibrationVIEW
 							_State = GusStatus.Error;
@@ -390,21 +398,6 @@ namespace VibrationVIEW_GUS
 				{
 					switch(_State)
 					{
-					// normal state would be to start test again after finished
-						case GusStatus.Finished:
-							// always should have a test name from GUS_PrepareTest 
-							if (_VibrationVIEWTestName == "")
-							{
-								// out of sequence
-								// this could happen with operator intervention, 
-								//  or application starting after VV has test running
-								//  if GUS_PrepareTest was never run, we can not start the test
-								//  assume error state
-								_State = GusStatus.Error;
-								return CallReturnFAIL;
-							}
-							_State = GusStatus.Ready;
-							return GusConstants.CallReturnSuccess;
 						case GusStatus.Ready:
 							if (_VibrationVIEWTestName == "")
 							{
@@ -425,7 +418,7 @@ namespace VibrationVIEW_GUS
 								_State = GusStatus.Error;
 								return CallReturnFAIL;
 							}
-							_State = GusStatus.Running;
+							_State = GusStatus.PreTestRunning;
 							return GusConstants.CallReturnSuccess;
 						default:
 						// called from invalid state
@@ -453,21 +446,20 @@ namespace VibrationVIEW_GUS
 				{
 					switch (_State)
 					{
-						case GusStatus.Pause:
-						case GusStatus.Ready:
-						case GusStatus.Error:
-						case GusStatus.Running:
-							_State = GusStatus.Finished;
-							break;
-						case GusStatus.ProjLoadFailed:
-							_State = GusStatus.DeviceOpen;
-							break;
-						default:
+					case GusStatus.Pause:
+					case GusStatus.Running:
+					case GusStatus.PreTestRunning:
+						_VibrationVIEWControl.StopTest();
+						_State = GusStatus.Ready;
+						break;
+					case GusStatus.Finished:
+						_State = GusStatus.Ready;
+						break;
+					default:
 							// called with invalid state
 							return CallReturnFAIL;
 					}
 
-					_VibrationVIEWControl.StopTest();
 					return GusConstants.CallReturnSuccess;
 				}
 				catch(Exception)
@@ -476,51 +468,113 @@ namespace VibrationVIEW_GUS
 				}
 			}
 
-			/// <summary>
-			/// Check if we stopped running.
-			/// Anytime we look at our RUNNING state we need to see if we aborted or finished
-			/// </summary>
-			/// <returns></returns>
-			private void UpdateRunningState()
+		/// <summary>
+		/// Check if we stopped running.
+		/// Anytime we look at our RUNNING state we need to see if we aborted or finished
+		/// </summary>
+		/// <returns></returns>
+		private void UpdateRunningState()
+		{
+			if (_State == GusStatus.PreTestRunning)
 			{
-				if (_State == GusStatus.Running)
+				try
 				{
-					try
+					// fix up our state if was running, now not running because faulted, completed, or stopped from GUI
+					if (_VibrationVIEWControl.Running == FALSE)
 					{
-						// fix up our state if was running, now not running because faulted, completed, or stopped from GUI
-						if (_VibrationVIEWControl.Running == FALSE)
+						if (_VibrationVIEWControl.Aborted == FALSE)
 						{
-							if (_VibrationVIEWControl.Aborted == FALSE)
-							{
-								_State = GusStatus.Finished;
-							}
-							else
-							{
-								_State = GusStatus.Error;
-							}
+							_State = GusStatus.Finished;
+						}
+						else
+						{
+							_State = GusStatus.Error;
 						}
 					}
-					catch (Exception)
+					else
 					{
-						_State = GusStatus.Error;
-					}
-				}
-				else
-				{
-					// if not running state, fix up the state to running if the controller is running because crashed, started from GUI, remote started
-					try
-					{
-						if ((_VibrationVIEWControl != null) && (_VibrationVIEWDevice != "") && (_VibrationVIEWControl.Running != FALSE))
+						if (_VibrationVIEWControl.Starting == FALSE)
 						{
 							_State = GusStatus.Running;
 						}
-					}
-					catch (Exception)
-					{
-						_State = GusStatus.Error;
+
 					}
 				}
-			} 
+				catch (Exception)
+				{
+					_State = GusStatus.Error;
+				}
+			}
+
+			if (_State == GusStatus.Running)
+			{
+				try
+				{
+					if (IsSchedulePause())
+					{
+						_State = GusStatus.Pause;
+					}
+					// fix up our state if was running, now not running because faulted, completed, or stopped from GUI
+					if (_VibrationVIEWControl.Running == FALSE)
+					{
+						if (_VibrationVIEWControl.Aborted == FALSE)
+						{
+							_State = GusStatus.Finished;
+						}
+						else
+						{
+							_State = GusStatus.Error;
+						}
+					}
+				}
+				catch (Exception)
+				{
+					_State = GusStatus.Error;
+				}
+			}
+			else
+			{
+				// if not running state, fix up the state to running if the controller is running because crashed, started from GUI, remote started
+				try
+				{
+					if ((_VibrationVIEWControl != null) && (_VibrationVIEWDevice != "") && (_VibrationVIEWControl.Running != FALSE))
+					{
+						if (_VibrationVIEWControl.Starting == FALSE)
+						{
+							if (IsSchedulePause())
+							{
+								_State = GusStatus.Pause;
+							}
+							else
+							{
+								_State = GusStatus.Running;
+							}
+						}
+						else
+						{
+							_State = GusStatus.PreTestRunning;
+						}
+					}
+				}
+				catch (Exception)
+				{
+					_State = GusStatus.Error;
+				}
+			}
+		}
+
+		private bool IsSchedulePause()
+		{
+			int iReturn;
+			string csReturn;
+			_VibrationVIEWControl.Status(out csReturn, out iReturn);
+			if((iReturn & 0xff) == 0x31) // WAIT_FOR_OPERATOR
+			{
+				return true;
+			}
+			return false;
+		}
+
 			/// <summary>
 			/// format VibrationVIEW VR9500 serial number as shown on back of BOX
 			/// </summary>
