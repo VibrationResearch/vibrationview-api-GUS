@@ -363,7 +363,7 @@ namespace VibrationVIEW_GUS
 					}
 					catch(Exception)
 					{
-						_State = GusStatus.ProjLoadFailed;
+						_State = GusStatus.Error;
 						return CallReturnFAIL;
 					}
 				}
