@@ -220,10 +220,6 @@ namespace VibrationVIEW_GUS
 			{
 				UpdateRunningState();
 				return _State;
-				// omit State 2: "PreTestRunning" The state diagram defines it as a dactron pre-test, which we don't do
-				//  activeX has no concept of pretest.  We could see if pre-test is enabled using a PARAM, 
-				//  but the interface has no way to transition from pre-test mode to run mode.
-				//
 				// omit State 6 : “Busy” In the standard, the state “Busy” 6 was introduced for any event where the device was “busy” doing
 				//  something, not immediately related to an actual state. E.g. opening a file, writing data to disk, is
 				//  busy with a transition,… This state has not been defined as a unique state, and as it has been
