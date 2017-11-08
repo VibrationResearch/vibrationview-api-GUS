@@ -516,6 +516,7 @@ namespace VibrationVIEW_GUS
 					{
 						_State = GusStatus.Pause;
 					}
+
 					// fix up our state if was running, now not running because faulted, completed, or stopped from GUI
 					if (_VibrationVIEWControl.Running == FALSE)
 					{
