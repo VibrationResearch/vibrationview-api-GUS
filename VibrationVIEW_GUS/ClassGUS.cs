@@ -454,6 +454,7 @@ namespace VibrationVIEW_GUS
 						_VibrationVIEWControl.StopTest();
 						_State = GusStatus.Ready;
 						break;
+                    case GusStatus.Error:
 					case GusStatus.Finished:
 						_State = GusStatus.Ready;
 						break;
