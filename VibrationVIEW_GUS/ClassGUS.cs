@@ -133,6 +133,11 @@ namespace VibrationVIEW_GUS
 					{
 						_VibrationVIEWControl.ResumeTest();
 					}
+					else if(_VibrationVIEWControl.HoldLevel != FALSE)
+					{
+						const int ID_TEST_RUNTEST = 32870;
+						_VibrationVIEWControl.MenuCommand(ID_TEST_RUNTEST);
+					}
 					else
 					{
 						const int ID_TEST_ADVANCETONEXTLEVEL = 32896;
@@ -549,7 +554,14 @@ namespace VibrationVIEW_GUS
 						}
 						else
 						{
-							_State = GusStatus.PreTestRunning;
+							if (IsSchedulePause())
+							{
+								_State = GusStatus.Pause;
+							}
+							else
+							{
+								_State = GusStatus.PreTestRunning;
+							}
 						}
 					}
 				}
@@ -569,6 +581,15 @@ namespace VibrationVIEW_GUS
 			{
 				return true;
 			}
+			if ((iReturn & 0xff) == 0x31) // WAIT_FOR_OPERATOR
+			{
+				return true;
+			}
+			if (FALSE != _VibrationVIEWControl.HoldLevel)
+			{
+				return true;
+			}
+
 			return false;
 		}
 
