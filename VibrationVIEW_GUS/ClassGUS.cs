@@ -336,7 +336,7 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("Name", "TimeElapsedInTolerance");
                         writer.WriteElementString("IsReadOnly", "true");
                         writer.WriteStartElement("Type");
-                        writer.WriteAttributeString("xsi", "type", null, "xs:time");
+                        writer.WriteAttributeString("xsi", "type", null, "xs:integer");
                         writer.WriteElementString("EngineeringUnit", "Sec");
                         writer.WriteEndElement();
                     }
@@ -469,7 +469,9 @@ namespace VibrationVIEW_GUS
                     }
                     else
                     {
-                        writer.WriteElementString("TimeElapsedInTolerance", _VibrationVIEWControl.get_ReportField("LevelTime"));
+                        string LevelTime = _VibrationVIEWControl.get_ReportField("LevelTime");
+                        TimeSpan ts = TimeSpan.Parse(LevelTime);
+                        writer.WriteElementString("TimeElapsedInTolerance", string.Format("{0}", ts.TotalSeconds));
                     }
                     writer.WriteEndElement();
 
