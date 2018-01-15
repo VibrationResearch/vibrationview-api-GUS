@@ -216,6 +216,7 @@ namespace VibrationVIEW_GUS
                     writer.WriteStartDocument(true);
                     writer.WriteStartElement("Device", "http://www.gus-interface.com/GusDeviceInfo");
                     writer.WriteAttributeString("xmlns", "xsi", "http://www.w3.org/2000/xmlns/", XmlSchema.InstanceNamespace);
+                    writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.gus-interface.com/GusDeviceInfo GusDeviceInfo.xsd");
 
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "DeviceInfo");
