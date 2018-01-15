@@ -342,6 +342,7 @@ namespace VibrationVIEW_GUS
                     }
 
                     writer.WriteEndElement();
+                    writer.WriteEndElement();
 
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "Measurements");
