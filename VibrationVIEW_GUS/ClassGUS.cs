@@ -318,7 +318,7 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("Name", "PulsesRun");
                         writer.WriteElementString("IsReadOnly", "true");
                         writer.WriteStartElement("Type");
-                        writer.WriteAttributeString("xsi", "type", null, "xs:integer");
+                        writer.WriteAttributeString("xsi", "type", null, "Integer");
                         writer.WriteEndElement();
                         writer.WriteEndElement();
 
@@ -326,7 +326,7 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("Name", "PulsesScheduled");
                         writer.WriteElementString("IsReadOnly", "true");
                         writer.WriteStartElement("Type");
-                        writer.WriteAttributeString("xsi", "type", null, "xs:integer");
+                        writer.WriteAttributeString("xsi", "type", null, "Integer");
                         writer.WriteEndElement();
                         writer.WriteEndElement();
                     }
@@ -336,7 +336,7 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("Name", "TimeElapsedInTolerance");
                         writer.WriteElementString("IsReadOnly", "true");
                         writer.WriteStartElement("Type");
-                        writer.WriteAttributeString("xsi", "type", null, "xs:integer");
+                        writer.WriteAttributeString("xsi", "type", null, "Integer");
                         writer.WriteElementString("EngineeringUnit", "Sec");
                         writer.WriteEndElement();
                     }
