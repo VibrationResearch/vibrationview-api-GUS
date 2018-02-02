@@ -272,6 +272,19 @@ namespace VibrationVIEW_GUS
 
                     writer.WriteEndElement();
 
+                    int testtype = _VibrationVIEWControl.get_TestType();
+                    string controlunit = _VibrationVIEWControl.get_ReportField("Control%f %s");
+                    string demandunit = _VibrationVIEWControl.get_ReportField("Demand%f %s");
+                    if ((int)TestTypes.TEST_SYSCHECK == testtype)
+                    {
+                        controlunit = _VibrationVIEWControl.get_ReportField("Ch1%f %s");
+                        demandunit = controlunit;
+                    } else
+                    {
+                        controlunit = _VibrationVIEWControl.get_ReportField("Control%f %s");
+                        demandunit = _VibrationVIEWControl.get_ReportField("Demand%f %s");
+
+                    }
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "ControlledValues");
 
@@ -281,7 +294,6 @@ namespace VibrationVIEW_GUS
 
                     writer.WriteStartElement("Type");
                     writer.WriteAttributeString("xsi", "type", null, "Decimal");
-                    string controlunit = _VibrationVIEWControl.get_ReportField("Control%f %s");
                     writer.WriteElementString("EngineeringUnit", controlunit.Substring(controlunit.IndexOf(" ") + 1));
                     writer.WriteEndElement();
                     writer.WriteEndElement();
@@ -293,7 +305,6 @@ namespace VibrationVIEW_GUS
                     writer.WriteStartElement("Type");
                     writer.WriteAttributeString("xsi", "type", null, "Decimal");
 
-                    string demandunit = _VibrationVIEWControl.get_ReportField("Demand%f %s");
                     writer.WriteElementString("EngineeringUnit", demandunit.Substring(demandunit.IndexOf(" ") + 1));
                     writer.WriteEndElement();
                     writer.WriteEndElement();
@@ -311,7 +322,6 @@ namespace VibrationVIEW_GUS
                     writer.WriteEndElement();
                     writer.WriteEndElement();
 
-                    int testtype = _VibrationVIEWControl.get_TestType();
                     if ((int)TestTypes.TEST_SHOCK == testtype)
                     {
                         writer.WriteStartElement("Attribute");
@@ -339,9 +349,9 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("xsi", "type", null, "Integer");
                         writer.WriteElementString("EngineeringUnit", "Sec");
                         writer.WriteEndElement();
+                        writer.WriteEndElement();
                     }
 
-                    writer.WriteEndElement();
                     writer.WriteEndElement();
 
                     writer.WriteStartElement("Group");
@@ -355,7 +365,7 @@ namespace VibrationVIEW_GUS
                         writer.WriteAttributeString("xsi", "type", null, "Decimal");
 
                         string channel = _VibrationVIEWControl.get_ReportField(string.Format("Ch{0}%f %s", channelindex + 1));
-                        writer.WriteElementString("EngineeringUnit", demandunit.Substring(channel.IndexOf(" ") + 1));
+                        writer.WriteElementString("EngineeringUnit", channel.Substring(channel.IndexOf(" ") + 1));
                         writer.WriteEndElement();
                         writer.WriteEndElement();
                     }
@@ -453,15 +463,30 @@ namespace VibrationVIEW_GUS
                     writer.WriteElementString("Remark", "Test Interface");
                     writer.WriteEndElement();
 
+                    int testtype = _VibrationVIEWControl.get_TestType();
+                    string control, demand;
+                    if ((int)TestTypes.TEST_SYSCHECK == testtype)
+                    {
+                        control = "0.00";
+                        demand = "0.00";
+                    } else
+                    {
+                        control = _VibrationVIEWControl.get_ReportField("Control%.2f");
+                        demand = _VibrationVIEWControl.get_ReportField("Demand%.2f");
+
+                    }
+
+
                     writer.WriteStartElement("ControlledValues");
-                    writer.WriteElementString("Control", _VibrationVIEWControl.get_ReportField("Control%.2f"));
-                    writer.WriteElementString("Demand", _VibrationVIEWControl.get_ReportField("Demand%.2f"));
+
+                    writer.WriteElementString("Control",control);
+                    writer.WriteElementString("Demand", demand);
 
                     writer.WriteEndElement();
 
                     writer.WriteStartElement("Testing");
                     writer.WriteElementString("Stopcode", _VibrationVIEWControl.get_ReportField("Stopcode"));
-                    int testtype = _VibrationVIEWControl.get_TestType();
+
                     if ((int)TestTypes.TEST_SHOCK == testtype)
                     {
                         writer.WriteElementString("PulsesRun", Regex.Match(_VibrationVIEWControl.get_ReportField("Pulses"), @"\d+").Value);
