@@ -273,8 +273,6 @@ namespace VibrationVIEW_GUS
                     writer.WriteEndElement();
 
                     int testtype = _VibrationVIEWControl.get_TestType();
-                    string controlunit= _VibrationVIEWControl.get_ReportField(ControlReportField(testtype) + " %s");
-                    string demandunit = _VibrationVIEWControl.get_ReportField(DemandReportField(testtype) + " %s");
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "ControlledValues");
 
@@ -284,7 +282,7 @@ namespace VibrationVIEW_GUS
 
                     writer.WriteStartElement("Type");
                     writer.WriteAttributeString("xsi", "type", null, "Decimal");
-                    writer.WriteElementString("EngineeringUnit", controlunit.Substring(controlunit.IndexOf(" ") + 1));
+                    writer.WriteElementString("EngineeringUnit", ControlUnit(testtype));
                     writer.WriteEndElement();
                     writer.WriteEndElement();
 
@@ -295,7 +293,7 @@ namespace VibrationVIEW_GUS
                     writer.WriteStartElement("Type");
                     writer.WriteAttributeString("xsi", "type", null, "Decimal");
 
-                    writer.WriteElementString("EngineeringUnit", demandunit.Substring(demandunit.IndexOf(" ") + 1));
+                    writer.WriteElementString("EngineeringUnit", DemandUnit(testtype));
                     writer.WriteEndElement();
                     writer.WriteEndElement();
 
@@ -482,23 +480,10 @@ namespace VibrationVIEW_GUS
                     writer.WriteEndElement();
 
                     int testtype = _VibrationVIEWControl.get_TestType();
-                    string control, demand;
-                    if ((int)TestTypes.TEST_SYSCHECK == testtype)
-                    {
-                        control = "0.00";
-                        demand = "0.00";
-                    } else
-                    {
-                        control = _VibrationVIEWControl.get_ReportField(ControlReportField(testtype));
-                        demand = _VibrationVIEWControl.get_ReportField(DemandReportField(testtype));
-
-                    }
-
-
                     writer.WriteStartElement("ControlledValues");
 
-                    writer.WriteElementString("Control",control);
-                    writer.WriteElementString("Demand", demand);
+                    writer.WriteElementString("Control",ControlValue(testtype));
+                    writer.WriteElementString("Demand", DemandValue(testtype));
 
                     writer.WriteEndElement();
 
@@ -547,6 +532,57 @@ namespace VibrationVIEW_GUS
                 return CallReturnFAIL;
             }
         }
+        private string ValueModifier(string value, int testtype)
+        {
+            switch (testtype)
+            {
+                case (int)TestTypes.TEST_SYSCHECK:
+                    return "0.00";
+                case (int)TestTypes.TEST_SHOCK:
+                    if (_VibrationVIEWControl.get_ReportField("CurrPolarity") == "Negative")
+                        return "-" + value;
+                    else
+                        return value;
+                default:
+                    return value;
+            }
+        }
+
+        private string ControlValue(int testtype)
+        {
+            return ValueModifier(_VibrationVIEWControl.get_ReportField(ControlReportField(testtype)), testtype);
+        }
+
+        private string DemandValue(int testtype)
+        {
+            return ValueModifier(_VibrationVIEWControl.get_ReportField(ControlReportField(testtype)), testtype);
+        }
+
+        private string ControlUnit(int testtype)
+        {
+            string control = _VibrationVIEWControl.get_ReportField(ControlReportField(testtype) + " %s");
+            return control.Substring(control.IndexOf(' ') + 1) + UnitModifier(testtype);
+
+        }
+        private string DemandUnit(int testtype)
+        {
+            string demand = _VibrationVIEWControl.get_ReportField(DemandReportField(testtype) + " %s");
+            return demand.Substring(demand.IndexOf(' ') + 1) + UnitModifier(testtype);
+        }
+
+        private string UnitModifier(int testtype)
+        {
+            switch (testtype)
+            {
+                default:
+                    return "";
+                case (int)TestTypes.TEST_SYSCHECK:
+                case (int)TestTypes.TEST_SINE:
+                case (int)TestTypes.TEST_SHOCK:
+                    return " peak";
+            }
+        }
+
 
         /// <summary>
         /// Query of the equipment status: Ready, Stop, Pause, Run.
