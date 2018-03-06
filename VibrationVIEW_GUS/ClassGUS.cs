@@ -273,18 +273,8 @@ namespace VibrationVIEW_GUS
                     writer.WriteEndElement();
 
                     int testtype = _VibrationVIEWControl.get_TestType();
-                    string controlunit = _VibrationVIEWControl.get_ReportField("Control%f %s");
-                    string demandunit = _VibrationVIEWControl.get_ReportField("Demand%f %s");
-                    if ((int)TestTypes.TEST_SYSCHECK == testtype)
-                    {
-                        controlunit = _VibrationVIEWControl.get_ReportField("Ch1%f %s");
-                        demandunit = controlunit;
-                    } else
-                    {
-                        controlunit = _VibrationVIEWControl.get_ReportField("Control%f %s");
-                        demandunit = _VibrationVIEWControl.get_ReportField("Demand%f %s");
-
-                    }
+                    string controlunit= _VibrationVIEWControl.get_ReportField(ControlReportField(testtype) + " %s");
+                    string demandunit = _VibrationVIEWControl.get_ReportField(DemandReportField(testtype) + " %s");
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "ControlledValues");
 
@@ -396,6 +386,34 @@ namespace VibrationVIEW_GUS
                 return CallReturnFAIL;
             }
         }
+
+        private string DemandReportField(int testtype)
+        {
+            switch (testtype)
+            {
+                default:
+                    return "Demand%f";
+                case (int)TestTypes.TEST_SYSCHECK:
+                    return "Ch1%f"; // just return channel 1 units, and 0 demand
+                case (int)TestTypes.TEST_SINE:
+                    return "DemandAcceleration%f";
+            }
+        }
+
+        private string ControlReportField(int testtype)
+        {
+            switch (testtype)
+            {
+                default:
+                    return "Control%f";
+                case (int)TestTypes.TEST_SYSCHECK:
+                    return "Ch1%f";
+                case (int)TestTypes.TEST_SINE:
+                    return "CtrlAcceleration%f";
+
+            }
+        }
+
         /*----------------------------------------------------------------------------------------------------------*/
 
         /// <summary>
@@ -471,8 +489,8 @@ namespace VibrationVIEW_GUS
                         demand = "0.00";
                     } else
                     {
-                        control = _VibrationVIEWControl.get_ReportField("Control%.2f");
-                        demand = _VibrationVIEWControl.get_ReportField("Demand%.2f");
+                        control = _VibrationVIEWControl.get_ReportField(ControlReportField(testtype));
+                        demand = _VibrationVIEWControl.get_ReportField(DemandReportField(testtype));
 
                     }
 
