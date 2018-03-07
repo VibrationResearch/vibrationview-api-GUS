@@ -576,7 +576,6 @@ namespace VibrationVIEW_GUS
             {
                 default:
                     return "";
-                case (int)TestTypes.TEST_SYSCHECK:
                 case (int)TestTypes.TEST_SINE:
                 case (int)TestTypes.TEST_SHOCK:
                     return " peak";
