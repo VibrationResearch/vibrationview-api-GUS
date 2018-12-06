@@ -1,11 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibrationVIEW_GUS", "VibrationVIEW_GUS\VibrationVIEW_GUS.csproj", "{CE1C8597-6B32-4538-BAFF-CA78FF3CBC93}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SetupVibrationVIEW_Gus", "SetupVibrationVIEW_Gus\SetupVibrationVIEW_Gus.wixproj", "{FA4384F8-7141-4B6D-B7E6-C7F5EC2CEEAB}"
+EndProject
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "GusTestInterface", "Gus Interface\GusTestInterface.exe", "{0439184D-98A9-4BC4-B1C3-B68B22B06740}"
+	ProjectSection(DebuggerProjectSystem) = preProject
+		PortSupplier = 00000000-0000-0000-0000-000000000000
+		Executable = D:\data\Gus Interface\GusTestInterface.exe
+		RemoteMachine = DANIEL-PC
+		StartingDirectory = D:\data\Gus Interface
+		Environment = Default
+		LaunchingEngine = 00000000-0000-0000-0000-000000000000
+		UseLegacyDebugEngines = No
+		LaunchSQLEngine = No
+		AttachLaunchAction = No
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,8 +50,17 @@ Global
 		{FA4384F8-7141-4B6D-B7E6-C7F5EC2CEEAB}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FA4384F8-7141-4B6D-B7E6-C7F5EC2CEEAB}.Release|x86.ActiveCfg = Release|x86
 		{FA4384F8-7141-4B6D-B7E6-C7F5EC2CEEAB}.Release|x86.Build.0 = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Debug|Any CPU.ActiveCfg = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Debug|Mixed Platforms.ActiveCfg = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Debug|x86.ActiveCfg = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Release|Any CPU.ActiveCfg = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0439184D-98A9-4BC4-B1C3-B68B22B06740}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38565933-96BF-48A2-8A39-29371B937DDE}
 	EndGlobalSection
 EndGlobal
