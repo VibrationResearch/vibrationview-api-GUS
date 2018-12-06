@@ -198,11 +198,11 @@ namespace VibrationVIEW_GUS
             {
                 String result;
                 /*----------------------------------------------------------------------------------------------------------*/
-                Encoding utf8 = new UTF8Encoding(false);                   // Set Streamwriter to UTF-8 
+                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8 
 
                 XmlWriterSettings settings = new XmlWriterSettings();
 
-                settings.Encoding = utf8;
+                settings.Encoding = asciiencoder;
                 settings.Indent = true;
                 settings.CheckCharacters = false;
 
@@ -451,11 +451,11 @@ namespace VibrationVIEW_GUS
             {
                 String result;
                 /*----------------------------------------------------------------------------------------------------------*/
-                Encoding utf8 = new UTF8Encoding(false);                   // Set Streamwriter to UTF-8 
+                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8 
 
                 XmlWriterSettings settings = new XmlWriterSettings();
 
-                settings.Encoding = utf8;
+                settings.Encoding = asciiencoder;
                 settings.Indent = true;
                 settings.CheckCharacters = false;
 
@@ -555,7 +555,7 @@ namespace VibrationVIEW_GUS
 
         private string DemandValue(int testtype)
         {
-            return ValueModifier(_VibrationVIEWControl.get_ReportField(ControlReportField(testtype)), testtype);
+            return ValueModifier(_VibrationVIEWControl.get_ReportField(DemandReportField(testtype)), testtype);
         }
 
         private string ControlUnit(int testtype)
