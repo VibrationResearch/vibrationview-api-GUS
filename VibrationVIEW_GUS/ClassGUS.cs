@@ -379,7 +379,7 @@ namespace VibrationVIEW_GUS
                 }
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
                 return CallReturnFAIL;
             }
@@ -527,7 +527,7 @@ namespace VibrationVIEW_GUS
                     return result;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return CallReturnFAIL;
             }
@@ -750,6 +750,85 @@ namespace VibrationVIEW_GUS
         {
             return "";
 
+        }
+
+        /// <summary>
+        /// Returns the contents of the profiles folder as XML.
+        /// Filter can be a file filter (e.g. "*.vsp") or a test type name
+        /// ("sine", "random", "shock", "datareplay") which maps to
+        /// *.vsp, *.vrp, *.vkp, *.vfp respectively.
+        /// </summary>
+        /// <param name="Filter">File filter or test type name</param>
+        /// <returns>XML encoded directory listing</returns>
+        public string GUS_GetTestProfiles(string Filter)
+        {
+            const string ProfilesPath = @"c:\vibrationview\profiles";
+
+            try
+            {
+                // Map test type names to file filters
+                string fileFilter;
+                switch (Filter.ToLower())
+                {
+                    case "sine":
+                        fileFilter = "*.vsp";
+                        break;
+                    case "random":
+                        fileFilter = "*.vrp";
+                        break;
+                    case "shock":
+                        fileFilter = "*.vkp";
+                        break;
+                    case "datareplay":
+                        fileFilter = "*.vfp";
+                        break;
+                    default:
+                        fileFilter = Filter;
+                        break;
+                }
+
+                string[] files = System.IO.Directory.GetFiles(ProfilesPath, fileFilter);
+
+                String result;
+                Encoding utf8encoder = new UTF8Encoding(false);
+
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Encoding = utf8encoder;
+                settings.Indent = true;
+                settings.CheckCharacters = false;
+
+                using (System.IO.MemoryStream xStreamData = new System.IO.MemoryStream())
+                {
+                    System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(xStreamData, settings);
+
+                    writer.WriteStartDocument(true);
+                    writer.WriteStartElement("TestProfiles");
+
+                    foreach (string file in files)
+                    {
+                        System.IO.FileInfo fi = new System.IO.FileInfo(file);
+                        writer.WriteStartElement("Profile");
+                        writer.WriteElementString("Name", fi.Name);
+                        writer.WriteEndElement();
+                    }
+
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    xStreamData.Flush();
+                    writer.Close();
+
+                    result = utf8encoder.GetString(xStreamData.ToArray());
+
+                    xStreamData.Dispose();
+                    Debug.WriteLine(result);
+
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                return CallReturnFAIL;
+            }
         }
 
         /// <summary>
