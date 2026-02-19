@@ -6,7 +6,7 @@ GUS is a standardized interface specification that enables higher-level control 
 
 ## Architecture
 
-The solution communicates with VibrationVIEW via its COM (ActiveX) interface.
+The solution communicates with VibrationVIEW via its COM/Automation interface.
 
 ```
 GUS Client (e.g., GusTestInterface)
@@ -130,11 +130,13 @@ VibrationVIEW_GUS.sln
 - VibrationVIEW automation option (VR9604) - OR - VibrationVIEW may be run in Simulation mode without any additional hardware or software
 - Visual Studio 2022
 - .NET Framework 4.5.2
-- x86 (32-bit) build target (COM limitation)
+- x86 (32-bit) or x64 (64-bit) build target
 
 ## Building
 
-Open `VibrationVIEW_GUS.sln` in Visual Studio and build. The project must be compiled as x86 since VibrationVIEW only exposes a 32-bit COM interface.
+Open `VibrationVIEW_GUS.sln` in Visual Studio and build. The project can be compiled as either x86 (32-bit) or x64 (64-bit) since VibrationVIEW supports both 32-bit and 64-bit COM/Automation interfaces.
+
+The compiled installer is located at `SetupVibrationVIEW_Gus/bin/Release/VibrationVIEW_Gus.msi`.
 
 ## License
 
