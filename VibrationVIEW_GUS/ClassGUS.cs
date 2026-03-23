@@ -20,7 +20,7 @@ using VibrationVIEWLib;
 
 namespace VibrationVIEW_GUS
 {
-    public class GUS : IGusExtended
+    public class GUS : IGus, IGusExtended
     {
         enum TestTypes
         {
