@@ -11,12 +11,6 @@
 	</Product>
 
 	<Fragment>
-		<!-- lookup vibrationview install folder, most recent version wins -->
-		<Property Id="INSTALLDIR">
-			<RegistrySearch Id="SystemFilePath2014" Type="raw" Root="HKLM" Key="Software\Vibration Research Corporation\2014.0" Name="System File Path" />
-			<RegistrySearch Id="SystemFilePath2015" Type="raw" Root="HKLM" Key="Software\Vibration Research Corporation\2015.0" Name="System File Path" />
-		</Property>
-
 		<!-- Folder Structure -->
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
