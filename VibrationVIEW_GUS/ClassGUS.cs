@@ -15,12 +15,11 @@ using System.Runtime.InteropServices;
 using System.Xml.Schema;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using QED.GUS;
 using VibrationVIEWLib;
 
 namespace VibrationVIEW_GUS
 {
-    public class GUS : IGus, IGusExtended
+    public class GUS : iGus, iGusSetParameter, iGUSGetTestProfiles
     {
         enum TestTypes
         {
@@ -36,7 +35,7 @@ namespace VibrationVIEW_GUS
             MAX_TEST_TYPES = 0
         };
 
-        // COM interface to VibrationVIEW (COM only works x86 (32 bit)
+        // COM interface to VibrationVIEW
         private VibrationVIEW _VibrationVIEWControl = null;
 
         // success returns GusConstants.CallReturnSucces
@@ -914,6 +913,17 @@ namespace VibrationVIEW_GUS
             {
                 return CallReturnFAIL;
             }
+        }
+
+        /// <summary>
+        /// Set a parameter on the device.
+        /// </summary>
+        /// <param name="parameter">Parameter name</param>
+        /// <param name="value">Parameter value</param>
+        /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
+        public string GUS_SetParameter(string parameter, string value)
+        {
+            return CallReturnFAIL;
         }
 
         /// <summary>
