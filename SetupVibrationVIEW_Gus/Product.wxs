@@ -30,20 +30,20 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLDIR">
 			<Component Id="VibrationVIEW_GUS">
-				<Class Id="{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}" Context="InprocServer32" Description="VibrationVIEW_GUS.GUS" ThreadingModel="both" ForeignServer="mscoree.dll">
+				<Class Id="{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}" Context="InprocServer32" Description="VibrationVIEW_GUS.GUS" ThreadingModel="both" ForeignServer="mscoree.dll">
 					<ProgId Id="VibrationVIEW_GUS.GUS" Description="VibrationVIEW_GUS.GUS" />
 				</Class>
 				<File Id="fileTargetDLL" KeyPath="yes" Source="$(var.VibrationVIEW_GUS.TargetPath)" />
 				<File Id="fileReadme" Source="GUS_ReadMe.rtf" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.15.0" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.15.0" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.15.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.15.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32\1.0.15.0" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.15.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-				<RegistryValue Root="HKCR" Key="CLSID\{D9A0FE86-3734-3B66-B3BB-E82E1BB366DC}\InprocServer32" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32\1.0.15.0" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32\1.0.15.0" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.15.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32\1.0.15.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32\1.0.15.0" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="Class" Value="VibrationVIEW_GUS.GUS" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="Assembly" Value="VibrationVIEW_GUS, Version=1.0.15.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
 			</Component>
 		</ComponentGroup>
 	</Fragment>
