@@ -5,7 +5,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 // Project Dependencies:
-//   VibrationVIEW (32 bit) - COM only supported (32 bit), COM+ NOT SUPPORTED (64 bit)
+//   VibrationVIEW - COM interface (32 bit and 64 bit supported)
 
 
 using System;
