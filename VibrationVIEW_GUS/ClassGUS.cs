@@ -6,6 +6,7 @@
 //
 // Project Dependencies:
 //   VibrationVIEW - COM interface (32 bit and 64 bit supported)
+//   GUSInterface.dll - QED GUS interface specification
 
 
 using System;
@@ -15,6 +16,8 @@ using System.Runtime.InteropServices;
 using System.Xml.Schema;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using QED.GUS;
+using QED.Gus;
 using VibrationVIEWLib;
 
 namespace VibrationVIEW_GUS
