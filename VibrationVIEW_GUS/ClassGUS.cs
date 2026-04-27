@@ -1,4 +1,4 @@
-﻿// VibrationVIEW_GUS
+// VibrationVIEW_GUS
 // GUS interface to VibrationVIEW controller
 // Copyright (C) 2016  Vibration Research Corporation
 //
@@ -22,7 +22,7 @@ using VibrationVIEWLib;
 
 namespace VibrationVIEW_GUS
 {
-    public class GUS : iGus, iGusSetParameter, iGUSGetTestProfiles
+    public class GUS : GusAbstractImplementation
     {
         enum TestTypes
         {
@@ -41,7 +41,6 @@ namespace VibrationVIEW_GUS
         // COM interface to VibrationVIEW
         private VibrationVIEW _VibrationVIEWControl = null;
 
-        // success returns GusConstants.CallReturnSucces
         // interface does not define fail, documentation indicates "ERR"
         const string CallReturnFAIL = "ERR";
 
@@ -64,24 +63,25 @@ namespace VibrationVIEW_GUS
         {
             ReleaseVibrationVIEW();
         }
+
         /// <summary>
-        /// The communication is closed. 
+        /// The communication is closed.
         /// Operating and communication software of the equipment is terminated.
         /// </summary>
         /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public void GUS_CloseApp()
+        public override void DoGUS_CloseApp()
         {
             ReleaseVibrationVIEW();
         }
 
         /// <summary>
-        /// The connection with the respective equipment is closed. 
-        /// The equipment becomes available for other control applications. 
+        /// The connection with the respective equipment is closed.
+        /// The equipment becomes available for other control applications.
         /// The running process of the equipment is not influenced.
         /// </summary>
         /// <param name="device">As identified bu GUS_OpenDevice</param>
         /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public string GUS_CloseDevice(string device)
+        public override string DoGUS_CloseDevice(string device)
         {
             if (_State == GusStatus.DeviceOpen)
             {
@@ -104,7 +104,7 @@ namespace VibrationVIEW_GUS
         /// The equipment is subsequently ready to receive a new PREPARE command.
         /// </summary>
         /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public string GUS_CloseTest()
+        public override string DoGUS_CloseTest()
         {
             // defined in VibrationVIEW Resource.h file
             const int ID_TEST_CLOSE = 33050;
@@ -141,7 +141,7 @@ namespace VibrationVIEW_GUS
         /// The run schedule, elapsed time, etc. of the interrupted test are not reset
         /// </summary>
         /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public string GUS_ContinueTest()
+        public override string DoGUS_ContinueTest()
         {
             UpdateRunningState();
             if (_State == GusStatus.Pause)
@@ -190,17 +190,17 @@ namespace VibrationVIEW_GUS
 
         /// <summary>
         /// Read Equipment Properties
-        /// “Get Device Info” will show all info from the device as available
+        /// "Get Device Info" will show all info from the device as available
         /// </summary>
         /// <returns>XML device info</returns>
-        public string GUS_GetDeviceInfo()
+        public override string DoGUS_GetDeviceInfo()
         {
             // Must open device prior to running test
             try
             {
                 String result;
                 /*----------------------------------------------------------------------------------------------------------*/
-                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8 
+                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8
 
                 XmlWriterSettings settings = new XmlWriterSettings();
 
@@ -223,7 +223,7 @@ namespace VibrationVIEW_GUS
                     writer.WriteStartElement("Group");
                     writer.WriteAttributeString("Name", "DeviceInfo");
 
-                    // Device Info               
+                    // Device Info
                     writer.WriteStartElement("Attribute");
                     writer.WriteAttributeString("Name", "Name");
                     writer.WriteElementString("IsReadOnly", "true");
@@ -362,7 +362,7 @@ namespace VibrationVIEW_GUS
                     writer.WriteEndElement();
 
                     /*----------------------------------------------------------------------------------------------------------*/
-                    // Device End           
+                    // Device End
                     writer.WriteEndElement();
 
                     // Document End
@@ -422,7 +422,7 @@ namespace VibrationVIEW_GUS
         /// </summary>
         /// <returns>xml Text string with summary of all device errors in clear text (only devices and system errors, no test cancellation info etc)
         /// </returns>
-        public string GUS_GetError()
+        public override string DoGUS_GetError()
         {
             try
             {
@@ -447,13 +447,13 @@ namespace VibrationVIEW_GUS
         /// Query of additional equipment status information.
         /// </summary>
         /// <returns>Arbitrary status string</returns>
-        public string GUS_GetInfo()
+        public override string DoGUS_GetInfo()
         {
             try
             {
                 String result;
                 /*----------------------------------------------------------------------------------------------------------*/
-                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8 
+                Encoding asciiencoder = new ASCIIEncoding();                   // Set Streamwriter to UTF-8
 
                 XmlWriterSettings settings = new XmlWriterSettings();
 
@@ -472,7 +472,7 @@ namespace VibrationVIEW_GUS
 
                     writer.WriteStartElement("Device");
 
-                    // Device Info               
+                    // Device Info
                     writer.WriteStartElement("DeviceInfo");
                     writer.WriteElementString("Name", "VibrationVIEW_Default");
                     writer.WriteElementString("Manufacturer", "Vibration Research");
@@ -589,11 +589,11 @@ namespace VibrationVIEW_GUS
         /// Query of the equipment status: Ready, Stop, Pause, Run.
         /// </summary>
         /// <returns>GusStatus</returns>
-        public string GUS_GetStatus()
+        public override string DoGUS_GetStatus()
         {
             UpdateRunningState();
             return _State;
-            // omit State 6 : “Busy” In the standard, the state “Busy” 6 was introduced for any event where the device was “busy” doing
+            // omit State 6 : "Busy" In the standard, the state "Busy" 6 was introduced for any event where the device was "busy" doing
             //  something, not immediately related to an actual state. E.g. opening a file, writing data to disk, is
             //  busy with a transition,… This state has not been defined as a unique state, and as it has been
             //  interpreted, does not relate to a unique condition of a device. Hence, the busy state will be ignored
@@ -602,13 +602,13 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// The hardware to communicate with is defined. 
-        /// The operating and communication software is loaded. 
+        /// The hardware to communicate with is defined.
+        /// The operating and communication software is loaded.
         /// The communication is initialized.
         /// </summary>
         /// <param name="device"></param>
         /// <returns></returns>
-        public string GUS_OpenDevice(string device)
+        public override string DoGUS_OpenDevice(string device)
         {
 
             if ((_State == GusStatus.DeviceClosed) && (_VibrationVIEWControl != null))
@@ -644,13 +644,13 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// The command “GUS_Open_App” will load the driver. The parameter of the command is the name of\
+        /// The command "GUS_Open_App" will load the driver. The parameter of the command is the name of\
         /// the driver, as registered by the Windows® operating system.
-        /// The device(s) that communicates by means of the selected driver is in the state “Closed” 9.
+        /// The device(s) that communicates by means of the selected driver is in the state "Closed" 9.
         /// </summary>
         /// <param name="app">Default VibrationVIEW - not checked</param>
-        /// <returns>The response must be a string: “ACK: device serial/version number”</returns>
-        public string GUS_Open_App(string app)
+        /// <returns>The response must be a string: "ACK: device serial/version number"</returns>
+        public override string DoGUS_Open_App(string app)
         {
             try
             {
@@ -677,13 +677,13 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// The equipment goes in PAUSE mode. The running test goes on hold 
-        /// but is not terminated. The elapsed time, 
-        /// status of the runs schedule, etc. within the test remain unchanged.
+        /// The equipment goes in PAUSE mode. The running test goes on hold
+        /// but is not terminated. The elapsed time,
+        /// status of the runs schedule, etc. remain unchanged.
         /// The equipment remains ready to continue the test or to stop the test.
         /// </summary>
         /// <returns></returns>
-        public string GUS_PauseTest()
+        public override string DoGUS_PauseTest()
         {
             UpdateRunningState();
             if (_State == GusStatus.Running)
@@ -718,7 +718,7 @@ namespace VibrationVIEW_GUS
         /// </summary>
         /// <param name="testName"></param>
         /// <returns></returns>
-        public string GUS_PrepareTest(string testName)
+        public override string DoGUS_PrepareTest(string testName)
         {
             // Must open device prior to running test
             if (_State == GusStatus.DeviceOpen)
@@ -748,7 +748,7 @@ namespace VibrationVIEW_GUS
         /// we shall chose to not implement
         /// </summary>
         /// <returns></returns>
-        public string GUS_Scan_Devices()
+        public override string DoGUS_Scan_Devices()
         {
             return "";
 
@@ -762,7 +762,7 @@ namespace VibrationVIEW_GUS
         /// </summary>
         /// <param name="Filter">File filter or test type name</param>
         /// <returns>XML encoded directory listing</returns>
-        public string GUS_GetTestProfiles(string Filter)
+        public override string DoGUS_GetTestProfiles(string Filter)
         {
             const string ProfilesPath = @"c:\vibrationview\profiles";
 
@@ -834,12 +834,12 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// The equipment goes in RUN mode. The loaded test is started and starts 
-        /// to run until the end of test, or until the command STOP or PAUSE is 
+        /// The equipment goes in RUN mode. The loaded test is started and starts
+        /// to run until the end of test, or until the command STOP or PAUSE is
         /// received, or until eventually a failure terminates the test.
         /// </summary>
         /// <returns></returns>
-        public string GUS_StartTest()
+        public override string DoGUS_StartTest()
         {
             UpdateRunningState();
 
@@ -851,7 +851,7 @@ namespace VibrationVIEW_GUS
                         if (_VibrationVIEWTestName == "")
                         {
                             // out of sequence
-                            // this could happen with operator intervention, 
+                            // this could happen with operator intervention,
                             //  or application starting after VV has test running
                             //  if GUS_PrepareTest was never run, we can not start the test
                             //  assume error state
@@ -882,13 +882,13 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// The equipment goes in READY mode. The running test goes on hold and is terminated. 
-        /// All control parameters (elapsed time, run schedule, etc.) 
-        /// are reset and the equipment is ready for a new START. 
+        /// The equipment goes in READY mode. The running test goes on hold and is terminated.
+        /// All control parameters (elapsed time, run schedule, etc.)
+        /// are reset and the equipment is ready for a new START.
         /// The status is identical as after the PREPARE command.
         /// </summary>
         /// <returns></returns>
-        public string GUS_StopTest()
+        public override string DoGUS_StopTest()
         {
             UpdateRunningState();
             try
