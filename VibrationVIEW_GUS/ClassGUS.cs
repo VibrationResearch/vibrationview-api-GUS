@@ -919,17 +919,6 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
-        /// Set a parameter on the device.
-        /// </summary>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Parameter value</param>
-        /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public string GUS_SetParameter(string parameter, string value)
-        {
-            return CallReturnFAIL;
-        }
-
-        /// <summary>
         /// Check if we stopped running.
         /// Anytime we look at our RUNNING state we need to see if we aborted or finished
         /// </summary>
