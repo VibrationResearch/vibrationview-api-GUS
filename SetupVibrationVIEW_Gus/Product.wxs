@@ -45,6 +45,9 @@
 				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
 				<RegistryValue Root="HKCR" Key="CLSID\{AD82720F-AD82-3C3E-9E4D-5E6B7D165290}\InprocServer32" Name="CodeBase" Value="file:///[#fileTargetDLL]" Type="string" Action="write" />
 			</Component>
+			<Component Id="GUSInterface">
+				<File Id="fileGUSInterface" KeyPath="yes" Source="$(var.VibrationVIEW_GUS.TargetDir)GUSInterface.dll" />
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 

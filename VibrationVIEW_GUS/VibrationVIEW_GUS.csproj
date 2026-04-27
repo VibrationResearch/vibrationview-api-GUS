@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="GUSInterface">
       <HintPath>..\Gus Interface\GUSInterface.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
