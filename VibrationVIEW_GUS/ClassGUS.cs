@@ -1048,10 +1048,6 @@ namespace VibrationVIEW_GUS
             {
                 return true;
             }
-            if ((iReturn & 0xff) == 0x31) // WAIT_FOR_OPERATOR
-            {
-                return true;
-            }
             if (FALSE != _VibrationVIEWControl.HoldLevel)
             {
                 return true;
