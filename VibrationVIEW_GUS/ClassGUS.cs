@@ -16,10 +16,11 @@ using System.Xml.Schema;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using VibrationVIEWLib;
+using QED.GUS;
 
 namespace VibrationVIEW_GUS
 {
-    public class GUS : iGus, iGusSetParameter, iGUSGetTestProfiles
+    public class GUS : IGus, IGusGetSetParameter, IGusGetTestProfiles
     {
         enum TestTypes
         {
@@ -916,12 +917,21 @@ namespace VibrationVIEW_GUS
         }
 
         /// <summary>
+        /// Get a parameter from the device.
+        /// </summary>
+        /// <param name="parameterName">Parameter name</param>
+        /// <returns>"ERR"/parameter value</returns>
+        public string GUS_GetParameter(string parameterName)
+        {
+            return CallReturnFAIL;
+        }
+
+        /// <summary>
         /// Set a parameter on the device.
         /// </summary>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Parameter value</param>
+        /// <param name="parameterName">Parameter name (XML containing name and value)</param>
         /// <returns>"ERR"/GusConstants.CallReturnSuccess</returns>
-        public string GUS_SetParameter(string parameter, string value)
+        public string GUS_SetParameter(string parameterName)
         {
             return CallReturnFAIL;
         }
