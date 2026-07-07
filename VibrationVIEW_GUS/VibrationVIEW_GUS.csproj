@@ -34,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -85,15 +85,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="VibrationVIEWLib">
-      <Guid>{689DBEFA-B0A7-4413-963E-ECB35986DEA4}</Guid>
-      <VersionMajor>4</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
+    <Reference Include="Interop.VibrationVIEWLib">
+      <HintPath>..\Gus Interface\Interop.VibrationVIEWLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

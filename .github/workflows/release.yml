@@ -10,13 +10,22 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v2
+
+      - name: Install WiX Toolset
+        run: choco install wixtoolset --version=3.14.1 -y --no-progress
 
       - name: Extract version from tag
         id: version
