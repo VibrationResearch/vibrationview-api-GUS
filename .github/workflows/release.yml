@@ -1,0 +1,70 @@
+name: Release MSI
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "version_four=${VERSION}.0" >> "$GITHUB_OUTPUT"
+
+      - name: Update version in AssemblyInfo.cs
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version_four }}"
+          $file = "VibrationVIEW_GUS/Properties/AssemblyInfo.cs"
+          $content = Get-Content $file -Raw
+          $content = $content -replace 'AssemblyVersion\("[^"]*"\)', "AssemblyVersion(`"$version`")"
+          $content = $content -replace 'AssemblyFileVersion\("[^"]*"\)', "AssemblyFileVersion(`"$version`")"
+          Set-Content $file $content
+
+      - name: Update version in Product.wxs
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version_four }}"
+          $file = "SetupVibrationVIEW_Gus/Product.wxs"
+          $content = Get-Content $file -Raw
+          $content = $content -replace 'Version="[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"', "Version=`"$version`""
+          $content = $content -replace 'InprocServer32\\[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', "InprocServer32\$version"
+          $content = $content -replace 'Version=[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+,', "Version=$version,"
+          Set-Content $file $content
+
+      - name: Restore NuGet packages
+        run: nuget restore VibrationVIEW_GUS.sln
+
+      - name: Build solution
+        run: msbuild VibrationVIEW_GUS.sln /p:Configuration=Release /p:Platform="Mixed Platforms" /verbosity:minimal
+
+      - name: Find MSI
+        id: msi
+        shell: bash
+        run: |
+          MSI_PATH=$(find SetupVibrationVIEW_Gus/bin -name "*.msi" | head -1)
+          echo "path=${MSI_PATH}" >> "$GITHUB_OUTPUT"
+          echo "name=VibrationVIEW_Gus-${{ steps.version.outputs.version }}.msi" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          files: ${{ steps.msi.path }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
