@@ -25,7 +25,7 @@ jobs:
         uses: nuget/setup-nuget@v2
 
       - name: Install WiX Toolset
-        run: choco install wixtoolset --version=3.14.1 -y --no-progress
+        run: choco install wixtoolset -y --no-progress
 
       - name: Extract version from tag
         id: version
