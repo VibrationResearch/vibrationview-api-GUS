@@ -24,7 +24,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          VERSION=$(grep -oP 'AssemblyVersion\("\K[0-9]+\.[0-9]+\.[0-9]+' VibrationVIEW_GUS/Properties/AssemblyInfo.cs)
+          VERSION=$(grep -o 'AssemblyVersion("[0-9]*\.[0-9]*\.[0-9]*' VibrationVIEW_GUS/Properties/AssemblyInfo.cs | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Generate changelog entry
@@ -32,7 +32,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           DATE=$(date +%Y-%m-%d)
-          PREVIOUS_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          PREVIOUS_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)
           if [ -n "$PREVIOUS_TAG" ]; then
             LOG=$(git log --pretty=format:"- %s" "$PREVIOUS_TAG"..HEAD -- ':!CHANGELOG.md')
           else
