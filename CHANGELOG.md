@@ -1,0 +1,85 @@
+# Changelog
+
+## [1.1.0] - 2026-07-07
+- fix WiX install by removing pinned version
+- replace COM reference with interop DLL for CI compatibility
+- set application version to 1.1.0
+- add changelog generation to release workflow
+- add CI workflow to build and release MSI on version tags
+- add an installer
+- remove duplicate logic
+- implement IGus, IGusGetSetParameter,I GusGetTestProfiles (not  iGus, iGusSetParameter, iGUSGetTestProfiles)
+- remove the extracted interface information
+- most recent version of GusInterace.dll
+- include only GusInterface.dll
+- target .net 4.8
+- include only GusInterface.dll
+- add a msi file so recompilation not neccessary
+- rename our CLSID to reflect current build
+- iGusSetParameter and  iGUSGetTestProfiles revised interfaces
+- extract the interface files independently from the GUSInterface dll
+- split out the test applications
+- make ClassGUS 32 bit only
+- revert changes from wix package
+- generated msi doesn't register the dll correctly
+- working MSI
+- update WIX
+- always install to VibrationVIEW_Gus
+- the actual GUS project should be AnyCPU
+- rebuilt with change to IGus, IGusExtended
+- public class GUS : IGus, IGusExtended
+- clean up readme.md
+- include the compiled installer
+- update to 1.0.15.0
+- add readme and license
+- change the GUS class to use the IGusExtended interface
+- extend the GUS interface to IGusExtended with the added method
+- add tests for the new function
+- Add GUS_GetTestProfiles to return profile directory listing as XML
+- add gitignore for .vs /bin /obj
+- update to compile with VS2022
+- remove wix package
+- add an app.config
+- remove Wix.3.10.1.nupkg
+- gitignore packages folder
+- bumped version number
+- change encoder to ASCII (GUS can't handle UTF-8) fixed demand call
+- update project to 2015
+- bump to v1.0.13
+- don't add peak to system-check - it already reads peak
+- added suffix to control and demand
+- bumped to version 1.0.12.0
+- split out sine control and demand report fields, else the unit changes as the test progresses
+- bumped version fixed malformed XML in Shock. added demand and control back to systemcheck per Ben's request
+- bumped all the versions to 1.0.8
+- replaced xs:integer with Integer - GUS didn't handle xs: types
+- updated to version 1.0.7
+- changed elapsed time format to integer
+- bumped version number
+- added missing end element
+- updated version for installer package
+- bumped version number
+- added schemaLocation
+- Updated version to 1.0.4.0
+- Added GUS_GetDeviceInfo GUS_GetInfo()
+- include most recent files from Ben Haest
+- updated target framework to 4.5.2
+- updated the version
+- added .Error to state update.  Reflects the state diagram as provided by Ben
+- fixed formatting
+- added hack to allow 'hold pulse' for force GUS state HOLD, and allow continue to send next pulse while in hold.
+- files revised with Version 7 Status Machine eample
+- Revision Sept 2016 from Ben Haest
+- update versions & copyrights
+- Refactor file formatting
+- fix up PretestRunning state comment
+- Gus removed state ProjectLoadFailed
+- reflect Scheduled pause as GusStatus.Paus
+- force "ClostTest" to actually close the test profile
+- moved the test interface - no code change
+- added _ to the private variables
+- include the WIX 3.10.1 package
+- added installer to project file
+- added header and fixed unreachable code
+- Added wix installer
+- initial commit
