@@ -25,6 +25,16 @@ GUS Client (e.g., GusTestInterface)
 - **`IGus`** (from `GUSInterface.dll`) - The standard GUS interface defining the core command set for vibration test equipment control.
 - **`IGusExtended`** (this project) - Extends `IGus` with VibrationVIEW-specific additions such as `GUS_GetTestProfiles`.
 
+## GUS Test Interface Configuration
+
+When configuring the GUS Test Interface client, use the following settings:
+
+| Field | Value |
+|---|---|
+| **Driver** | `VibrationVIEW_GUS.GUS` |
+| **Application** | Not used |
+| **Device** | Serial number of VR9500 (if left empty, uses whatever is connected to VibrationVIEW) |
+
 ## GUS State Machine
 
 The GUS specification defines a state machine that governs equipment control flow:
@@ -137,6 +147,10 @@ VibrationVIEW_GUS.sln
 Open `VibrationVIEW_GUS.sln` in Visual Studio and build. The project can be compiled as either x86 (32-bit) or x64 (64-bit) since VibrationVIEW supports both 32-bit and 64-bit COM/Automation interfaces.
 
 The compiled installer is located at `SetupVibrationVIEW_Gus/bin/Release/VibrationVIEW_Gus.msi`.
+
+Pre-built MSI installers are available from:
+- **[GitHub Releases](../../releases)** - stable versioned builds
+- **[GitHub Actions](../../actions)** - build artifacts from the latest CI runs
 
 ## License
 
