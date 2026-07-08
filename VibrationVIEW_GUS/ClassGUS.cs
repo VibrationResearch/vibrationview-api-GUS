@@ -654,7 +654,16 @@ namespace VibrationVIEW_GUS
             {
                 if (_VibrationVIEWControl == null)
                 {
-                    _VibrationVIEWControl = new VibrationVIEW();
+                    // Resolve the coclass behind the VibrationVIEW interface
+                    Type interfaceType = typeof(VibrationVIEW);
+                    var coClassAttr = (CoClassAttribute)Attribute.GetCustomAttribute(interfaceType, typeof(CoClassAttribute));
+                    Type comType = coClassAttr?.CoClass ?? interfaceType;
+                    Debug.WriteLine(string.Format("GUS_Open_App: interface={0}, coclass={1}, hasComImport={2}",
+                        interfaceType.FullName, comType.FullName,
+                        comType.GetCustomAttributes(typeof(ComImportAttribute), false).Length > 0));
+                    object raw = Activator.CreateInstance(comType);
+                    GusComDiagnostics.Report(raw, comType);
+                    _VibrationVIEWControl = (VibrationVIEW)raw;
                 }
                 if (_VibrationVIEWControl != null)
                 {
@@ -667,10 +676,12 @@ namespace VibrationVIEW_GUS
                     return CallReturnFAIL;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // software version failed to return?
-                return CallReturnFAIL;
+                string diag = GusComDiagnostics.FlushLog();
+                Debug.WriteLine("GUS_Open_App failed: " + ex.ToString());
+                Debug.WriteLine(diag);
+                return string.Format("{0}: {1}\n{2}", CallReturnFAIL, ex.Message, diag);
             }
         }
 
