@@ -1,4 +1,9 @@
 ## [1.1.0] - 2026-07-08
+- update the msi package
+- trigger the release on pushing the msi package
+- depend on the uploaded msi file
+
+## [1.1.0] - 2026-07-08
 - Revert "replace COM reference with interop DLL for CI compatibility
 - add GUS client configuration and MSI download links to README
 - add msi upload to the workflow
