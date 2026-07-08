@@ -2,8 +2,10 @@ name: Release MSI
 
 on:
   push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+    branches:
+      - main
+    paths:
+      - 'SetupVibrationVIEW_Gus/bin/Release/VibrationVIEW_Gus.msi'
 
 permissions:
   contents: write
@@ -18,11 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract version from tag
+      - name: Extract version from AssemblyInfo
         id: version
         shell: bash
         run: |
-          VERSION="${GITHUB_REF_NAME}"
+          VERSION=$(grep -oP 'AssemblyVersion\("\K[0-9]+\.[0-9]+\.[0-9]+' VibrationVIEW_GUS/Properties/AssemblyInfo.cs)
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Generate changelog entry
@@ -30,7 +32,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           DATE=$(date +%Y-%m-%d)
-          PREVIOUS_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sed -n '2p')
+          PREVIOUS_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
           if [ -n "$PREVIOUS_TAG" ]; then
             LOG=$(git log --pretty=format:"- %s" "$PREVIOUS_TAG"..HEAD -- ':!CHANGELOG.md')
           else
@@ -60,9 +62,17 @@ jobs:
           path: SetupVibrationVIEW_Gus/bin/Release/VibrationVIEW_Gus.msi
           if-no-files-found: error
 
+      - name: Create tag
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git tag "$VERSION"
+          git push origin "$VERSION"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.version.outputs.version }}
           name: v${{ steps.version.outputs.version }}
           generate_release_notes: true
           files: SetupVibrationVIEW_Gus/bin/Release/VibrationVIEW_Gus.msi
